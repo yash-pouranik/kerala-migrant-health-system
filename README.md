@@ -1,121 +1,93 @@
-# Kerala Migrant Health System (DHMS) - Spring Boot Backend
+# Kerala Migrant Health System (DHMS)
 
-Production-ready Java Spring Boot backend for the Kerala Digital Health Management System for Migrant Workers. Migrated from the Node.js Express/SQLite server to a robust, scalable Spring Boot 3 enterprise application.
-
----
-
-## 🚀 Features
-
-- **Spring Boot 3.3.5 & Java 22:** High-performance, reactive-capable microservice architecture.
-- **RESTful Endpoints:** 100% compatible with the DHMS React frontend (`port 5000`).
-- **Database (H2 File Persistent):** Zero external installation needed. All data persists to `./data/dhms.mv.db`.
-- **Automatic Data Seeding:** Populates 25 realistic migrant workers, health conditions, vaccination histories, visits, and insurance schemes on initial launch.
-- **Real-time WebSockets (Socket.IO):** Native Engine.IO & Socket.IO server directly embedded into Tomcat, maintaining complete compatibility with `socket.io-client`.
-- **ABHA QR Generation:** QR Codes generated dynamically using Google ZXing in Base64 format.
-- **File Uploads:** Multipart attachment and certificate storage serving via `/uploads/**`.
+A comprehensive, bilingual (English & regional languages) **Digital Health Management System** designed for migrant workers in Kerala. Features electronic medical records, ABHA integration, disease surveillance, and vaccination tracking.
 
 ---
 
-## 🛠️ Tech Stack
-
-| Component | Technology |
-|---|---|
-| **Framework** | Spring Boot 3.3.5 |
-| **Language** | Java 22 (LTS bytecode target: 21) |
-| **ORM / Data Access** | Spring Data JPA (Hibernate) |
-| **Database** | H2 (File Persistent) / SQLite / MySQL / PostgreSQL ready |
-| **Real-time** | `io.socket:socket.io-server` & `io.socket:engine.io-server` |
-| **QR Code** | `com.google.zxing:core` & `javase` |
-| **Build Tool** | Apache Maven with Maven Wrapper (`mvnw.cmd`) |
-
----
-
-## 📂 Project Structure
+## 🏗️ Architecture & Monorepo Structure
 
 ```
-d:\shiv\kerala-migrant-health-backend\
-├── src/main/java/com/kerala/dhms/
-│   ├── DhmsApplication.java         # Spring Boot entry point
-│   ├── config/                      # CORS, File Upload, Socket.IO config
-│   ├── controller/                  # REST Controllers (Auth, Patients, Visits, Vax, Dashboard)
-│   ├── dto/                         # Request and Response DTOs
-│   ├── entity/                      # 11 JPA Entities (Patients, Visits, Vaccinations, etc.)
-│   ├── repository/                  # Spring Data JPA Repositories
-│   ├── service/                     # Business Logic, QR Code, Storage, SocketIO
-│   └── util/                        # DataSeeder (25 realistic migrant profiles)
-├── src/main/resources/
-│   └── application.yml              # Port 5000, Datasource & JPA configuration
-├── pom.xml                          # Maven build dependencies
-├── mvnw & mvnw.cmd                  # Maven wrappers
-└── plan.md                          # Detailed architecture & migration plan
+kerala-migrant-health-system/
+├── backend/                  # Java 22 + Spring Boot 3.3.5 Backend (Port 5000)
+│   ├── src/                  # Controllers, Entities, Repositories, Services, DTOs
+│   ├── pom.xml               # Maven configuration
+│   ├── mvnw & mvnw.cmd       # Maven Wrapper
+│   ├── README.md             # Detailed Backend documentation
+│   └── plan.md               # Migration & Architecture plan
+│
+├── frontend/                 # React 19 + TypeScript + Vite + Tailwind CSS (Port 5173)
+│   ├── src/                  # React Components, Pages, Context, i18n
+│   ├── public/               # Public assets & localization files
+│   ├── package.json          # Dependencies & npm scripts
+│   └── vite.config.ts        # Vite configuration
+│
+└── README.md                 # Root fullstack documentation
 ```
 
 ---
 
-## 🏃 Quick Start Guide
+## ⚡ Quick Start Guide
 
-### 1. Build the Application
+### 1. Start the Backend (Spring Boot - Port 5000)
+
 ```powershell
-cd d:\shiv\kerala-migrant-health-backend
-.\mvnw.cmd clean package -DskipTests
-```
-
-### 2. Run the Application
-```powershell
-# Option A: Using Maven wrapper
+cd backend
 .\mvnw.cmd spring-boot:run
+```
+*(On initial launch, the backend automatically seeds 25 realistic migrant profiles and clinical histories into the persistent H2 database).*
 
-# Option B: Run packaged JAR directly
-java -jar target/dhms-1.0.0.jar
+### 2. Start the Frontend (React - Port 5173)
+
+Open a new terminal:
+```powershell
+cd frontend
+npm install
+npm run dev
 ```
 
-The backend starts on **`http://localhost:5000`**.
+Visit **`http://localhost:5173`** in your browser.
 
 ---
 
 ## 🔑 Demo Login Credentials
 
-| Username | Password | Role | District |
+| Username | Password | Role | District Scope |
 |---|---|---|---|
-| `admin@kerala.gov` | `admin` | Super Admin | All |
-| `wayanad@kerala.gov` | `district` | District Admin | Wayanad |
-| `worker` | `worker` | Field Worker | Wayanad |
-| `phc` | `phc` | PHC Staff | Wayanad |
+| `admin@kerala.gov` | `admin` | Super Admin | State-wide (All) |
+| `wayanad@kerala.gov` | `district` | District Admin | Wayanad District |
+| `worker` | `worker` | Field Worker | Wayanad Field Operations |
+| `phc` | `phc` | PHC Staff | Primary Health Centre |
 
 ---
 
-## 🌐 API Endpoints Reference
+## 🌟 Key Features
 
-### Authentication
-- `POST /api/auth/login` - Authenticate with username & password or OAuth
-- `POST /api/auth/verify` - Verify auth session token
-- `GET /api/auth/google` - Initiate Google OAuth URL
-- `GET /api/auth/callback/google` - OAuth code exchange & redirect
+1. **Digital Health Card & ABHA ID:**
+   - Real-time generation of QR codes for migrant health verification using ZXing.
+   - ABHA ID linking simulation with ABDM compliance.
 
-### Patient Records
-- `GET /api/patients` - Paginated migrant list with search, filters (`location`, `disease`)
-- `GET /api/patients/{id}` - Comprehensive medical dossier (conditions, vaccines, visits, schemes)
-- `POST /api/patients` - Register new migrant worker
-- `GET /api/patients/{id}/abha/qr` - Generate dynamic ABHA QR code
-- `POST /api/patients/{id}/abha/link` - Link ABHA ID with SMS simulation
+2. **Real-time Synchronization:**
+   - Embedded Socket.IO pipeline between React and Spring Boot.
+   - Real-time notification of patient registrations and updates across active sessions.
 
-### Clinical Management
-- `GET /api/patients/{id}/visits` - Clinical encounters and vitals
-- `POST /api/patients/{id}/visits` - Record encounter with file attachments (Multipart)
-- `GET /api/patients/{id}/vaccinations` - Vaccination schedule
-- `POST /api/patients/{id}/vaccinations/{vaccineId}/complete` - Mark completed with certificate upload (Multipart)
-- `GET /api/patients/{id}/labs` - Diagnostic laboratory reports
-- `GET /api/patients/{id}/prescriptions` - Medications prescribed
-- `GET /api/patients/{id}/referrals` - Hospital referrals
-- `GET /api/patients/{id}/consents` - ABDM electronic consent logs
+3. **Clinical Management:**
+   - Medical history recording with vital signs monitoring.
+   - Multipart clinical attachments and vaccination certificates storage (`/uploads/**`).
+   - Prescription logging, lab reports tracking, and tertiary hospital referrals.
 
-### Analytics & Real-Time
-- `GET /api/dashboard/metrics` - High-level metrics (total migrants, vax coverage, alerts)
-- `GET /api/dashboard/charts` - District distribution, vaccination rates, disease trends
-- `GET /socket.io/` - Engine.IO / Socket.IO real-time event pipeline
+4. **Public Health Surveillance:**
+   - District-level aggregation and disease trend monitoring.
+   - Vaccination coverage analytics and critical health alerts.
 
-### H2 Database Console
-- URL: `http://localhost:5000/h2-console`
-- JDBC URL: `jdbc:h2:file:./data/dhms`
-- Username: `sa`
-- Password: *(leave blank)*
+5. **Multi-language Support (i18n):**
+   - English, Hindi, Malayalam, Bengali, and Assamese translations for field workers and migrants.
+
+---
+
+## 🗄️ Database Console
+
+The backend runs a persistent H2 database with a web-accessible console:
+- **URL:** `http://localhost:5000/h2-console`
+- **JDBC URL:** `jdbc:h2:file:./data/dhms`
+- **Username:** `sa`
+- **Password:** *(leave blank)*

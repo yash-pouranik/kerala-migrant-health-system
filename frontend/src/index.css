@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #059669;
+  --color-primary-dark: #064e3b;
+  --color-primary-light: #d1fae5;
+  --color-secondary: #d97706;
+  --color-secondary-light: #fef3c7;
+  --color-cream: #fdfbf6;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-cream text-primary-dark font-sans antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-2 bg-primary text-white rounded-full font-medium hover:bg-primary-dark transition-all duration-300 shadow-md hover:shadow-lg active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-2 bg-white text-primary-dark border border-gray-200 rounded-full font-medium hover:bg-gray-50 transition-all duration-300 shadow-sm hover:shadow-md active:scale-95;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-6;
+  }
+
+  .badge-success {
+    @apply px-3 py-1 bg-primary-light text-primary text-xs font-semibold rounded-lg;
+  }
+
+  .badge-warning {
+    @apply px-3 py-1 bg-secondary-light text-secondary text-xs font-semibold rounded-lg;
+  }
+}
+
+/* Custom animations */
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

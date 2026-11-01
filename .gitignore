@@ -1,35 +1,24 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.built-jar.properties
-
-### VS Code ###
+# OS & IDE
+.DS_Store
+Thumbs.db
+.idea/
 .vscode/
-
-### Data & Runtime ###
-data/
-uploads/
+*.swp
 *.log
-database.sqlite
+
+# Backend (Spring Boot)
+backend/target/
+backend/data/
+backend/uploads/
+!backend/.mvn/wrapper/maven-wrapper.jar
+
+# Frontend (React Vite)
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
