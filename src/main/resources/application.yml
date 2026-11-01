@@ -1,0 +1,36 @@
+server:
+  port: 5000
+
+spring:
+  application:
+    name: dhms-backend
+  datasource:
+    url: jdbc:h2:file:./data/dhms;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+app:
+  upload-dir: ./uploads
+
+logging:
+  level:
+    root: INFO
+    com.kerala.dhms: INFO
